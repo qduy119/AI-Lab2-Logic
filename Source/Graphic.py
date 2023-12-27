@@ -259,7 +259,7 @@ class Graphic:
             self.running_draw()
             self.all_sprites.draw(self.screen)
             i, j = self.agent.get_pos()
-            self.arrow.shoot(self.direct, self.screen, i, j)
+            self.arrow.Shoot(self.direct, self.screen, i, j)
             temp = self.map.discovered()
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)

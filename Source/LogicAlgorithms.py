@@ -15,7 +15,7 @@ class AgentBrain:
         self.init_cell_matrix = None
 
         self.cave_cell = Cell.Cell((-1, -1), 10, Cell.Object.EMPTY.value)
-        self.agent_cell = None
+        self.AgentCell = None
         self.init_agent_cell = None
         self.KB = KnowledgeBase.KnowledgeBase()
         self.path = []
@@ -39,9 +39,9 @@ class AgentBrain:
                     (ir, ic), self.map_size, raw_map[ir][ic]
                 )
                 if Cell.Object.AGENT.value in raw_map[ir][ic]:
-                    self.agent_cell = self.cell_matrix[ir][ic]
-                    self.agent_cell.update_parent(self.cave_cell)
-                    self.init_agent_cell = copy.deepcopy(self.agent_cell)
+                    self.AgentCell = self.cell_matrix[ir][ic]
+                    self.AgentCell.update_parent(self.cave_cell)
+                    self.init_agent_cell = copy.deepcopy(self.AgentCell)
 
         file.close()
         self.init_cell_matrix = copy.deepcopy(self.cell_matrix)
@@ -70,7 +70,7 @@ class AgentBrain:
                     for adj_cell in adj_cell_list:
                         if not adj_cell.exist_stench():
                             return False, cell.matrix_pos
-        if self.agent_cell is None:
+        if self.AgentCell is None:
             return False, None
         return True, None
 
@@ -86,13 +86,13 @@ class AgentBrain:
         AddPerceptToKnowledgeBase(self, cell)
 
     def DirectionMove(self, next_cell):
-        if next_cell.map_pos[0] == self.agent_cell.map_pos[0]:
-            if next_cell.map_pos[1] - self.agent_cell.map_pos[1] == 1:
+        if next_cell.map_pos[0] == self.AgentCell.map_pos[0]:
+            if next_cell.map_pos[1] - self.AgentCell.map_pos[1] == 1:
                 self.AddAction(Action.TURN_UP)
             else:
                 self.AddAction(Action.TURN_DOWN)
-        elif next_cell.map_pos[1] == self.agent_cell.map_pos[1]:
-            if next_cell.map_pos[0] - self.agent_cell.map_pos[0] == 1:
+        elif next_cell.map_pos[1] == self.AgentCell.map_pos[1]:
+            if next_cell.map_pos[0] - self.AgentCell.map_pos[0] == 1:
                 self.AddAction(Action.TURN_RIGHT)
             else:
                 self.AddAction(Action.TURN_LEFT)
@@ -102,7 +102,7 @@ class AgentBrain:
     def MoveTo(self, next_cell):
         self.DirectionMove(next_cell)
         self.AddAction(Action.MOVE_FORWARD)
-        self.agent_cell = next_cell
+        self.AgentCell = next_cell
 
     def BacktrackingSearch(self):
         BacktrackingSearchAlgorithm(self)
@@ -122,7 +122,7 @@ class AgentBrain:
         if victory_flag:
             self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
 
-        if self.agent_cell.parent == self.cave_cell:
+        if self.AgentCell.parent == self.cave_cell:
             self.AddAction(Action.CLIMB_OUT_OF_THE_CAVE)
 
         return self.action_list, self.init_agent_cell, self.init_cell_matrix
