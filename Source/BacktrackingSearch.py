@@ -57,7 +57,7 @@ def BacktrackingSearchAlgorithm(self):
 
                 self.AddAction(Action.INFER_WUMPUS)
                 not_alpha = [[ValidAdjCell.get_literal(Cell.Object.WUMPUS, "-")]]
-                have_wumpus = self.KB.infer(not_alpha)
+                have_wumpus = self.KB.Inference(not_alpha)
 
                 if have_wumpus:
                     self.AddAction(Action.DETECT_WUMPUS)
@@ -71,7 +71,7 @@ def BacktrackingSearchAlgorithm(self):
                     not_alpha = [
                         [ValidAdjCell.get_literal(Cell.Object.WUMPUS, "+")]
                     ]
-                    have_no_wumpus = self.KB.infer(not_alpha)
+                    have_no_wumpus = self.KB.Inference(not_alpha)
 
                     if have_no_wumpus:
                         self.AddAction(Action.DETECT_NO_WUMPUS)
@@ -119,7 +119,7 @@ def BacktrackingSearchAlgorithm(self):
 
                 self.AddAction(Action.INFER_PIT)
                 not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "-")]]
-                have_pit = self.KB.infer(not_alpha)
+                have_pit = self.KB.Inference(not_alpha)
 
                 if have_pit:
                     self.AddAction(Action.DECTECT_PIT)
@@ -131,7 +131,7 @@ def BacktrackingSearchAlgorithm(self):
                 else:
                     self.AddAction(Action.INFER_NOT_PIT)
                     not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "+")]]
-                    have_no_pit = self.KB.infer(not_alpha)
+                    have_no_pit = self.KB.Inference(not_alpha)
 
                     if have_no_pit:
                         self.AddAction(Action.DETECT_NO_PIT)

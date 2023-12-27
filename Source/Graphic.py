@@ -2,6 +2,7 @@ import sys
 from Map import *
 from Agent import *
 import LogicAlgorithms
+from DisplayActionLogic import *
 
 class Graphic:
     def __init__(self):
@@ -28,26 +29,18 @@ class Graphic:
         self.bg = pygame.transform.scale(self.bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.direct = 3
 
-    def running_draw(self):
-        self.screen.fill(WHITE)
-        self.map.draw(self.screen)
-        score = self.agent.get_score()
-        text = self.font.render('Score: ' + str(score), True, BLACK)
-        textRect = text.get_rect()
-        textRect.center = (820, 25)
-        self.screen.blit(text, textRect)
 
-    def draw_button(self, surf, rect, button_color, text_color, text):
+    def DrawButton(self, surf, rect, button_color, text_color, text):
         pygame.draw.rect(surf, button_color, rect)
         text_surf = self.font.render(text, True, text_color)
         text_rect = text_surf.get_rect()
         text_rect.center = rect.center
         self.screen.blit(text_surf, text_rect)
 
-    def home_draw(self):
+    def DrawHome(self):
         self.screen.fill(WHITE)
 
-    def home_event(self):
+    def EventHome(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -74,32 +67,32 @@ class Graphic:
 
             self.mouse = pygame.mouse.get_pos()
             if 235 <= self.mouse[0] <= 735 and 120 <= self.mouse[1] <= 170:
-                self.draw_button(self.screen, LEVEL_1_POS, DARK_GREY, RED, "MAP 1")
+                self.DrawButton(self.screen, LEVEL_1_POS, DARK_GREY, RED, "MAP 1")
             else:
-                self.draw_button(self.screen, LEVEL_1_POS, LIGHT_GREY, BLACK, "MAP 1")
+                self.DrawButton(self.screen, LEVEL_1_POS, LIGHT_GREY, BLACK, "MAP 1")
             if 235 <= self.mouse[0] <= 735 and 200 <= self.mouse[1] <= 250:
-                self.draw_button(self.screen, LEVEL_2_POS, DARK_GREY, RED, "MAP 2")
+                self.DrawButton(self.screen, LEVEL_2_POS, DARK_GREY, RED, "MAP 2")
             else:
-                self.draw_button(self.screen, LEVEL_2_POS, LIGHT_GREY, BLACK, "MAP 2")
+                self.DrawButton(self.screen, LEVEL_2_POS, LIGHT_GREY, BLACK, "MAP 2")
             if 235 <= self.mouse[0] <= 735 and 280 <= self.mouse[1] <= 330:
-                self.draw_button(self.screen, LEVEL_3_POS, DARK_GREY, RED, "MAP 3")
+                self.DrawButton(self.screen, LEVEL_3_POS, DARK_GREY, RED, "MAP 3")
             else:
-                self.draw_button(self.screen, LEVEL_3_POS, LIGHT_GREY, BLACK, "MAP 3")
+                self.DrawButton(self.screen, LEVEL_3_POS, LIGHT_GREY, BLACK, "MAP 3")
             if 235 <= self.mouse[0] <= 735 and 360 <= self.mouse[1] <= 410:
-                self.draw_button(self.screen, LEVEL_4_POS, DARK_GREY, RED, "MAP 4")
+                self.DrawButton(self.screen, LEVEL_4_POS, DARK_GREY, RED, "MAP 4")
             else:
-                self.draw_button(self.screen, LEVEL_4_POS, LIGHT_GREY, BLACK, "MAP 4")
+                self.DrawButton(self.screen, LEVEL_4_POS, LIGHT_GREY, BLACK, "MAP 4")
             if 235 <= self.mouse[0] <= 735 and 440 <= self.mouse[1] <= 490:
-                self.draw_button(self.screen, LEVEL_5_POS, DARK_GREY, RED, "MAP 5")
+                self.DrawButton(self.screen, LEVEL_5_POS, DARK_GREY, RED, "MAP 5")
             else:
-                self.draw_button(self.screen, LEVEL_5_POS, LIGHT_GREY, BLACK, "MAP 5")
+                self.DrawButton(self.screen, LEVEL_5_POS, LIGHT_GREY, BLACK, "MAP 5")
             if 235 <= self.mouse[0] <= 735 and 520 <= self.mouse[1] <= 570:
-                self.draw_button(self.screen, EXIT_POS, DARK_GREY, RED, "EXIT")
+                self.DrawButton(self.screen, EXIT_POS, DARK_GREY, RED, "EXIT")
             else:
-                self.draw_button(self.screen, EXIT_POS, LIGHT_GREY, BLACK, "EXIT")
+                self.DrawButton(self.screen, EXIT_POS, LIGHT_GREY, BLACK, "EXIT")
             pygame.display.update()
 
-    def win_draw(self):
+    def DrawStatusWin(self):
         self.screen.fill(WHITE)
         self.screen.blit(self.bg, (0, 0))
 
@@ -116,7 +109,7 @@ class Graphic:
         textRect.center = (500, 100)
         self.screen.blit(text, textRect)
 
-    def win_event(self):
+    def EventWin(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -125,11 +118,11 @@ class Graphic:
         pygame.time.delay(200)
         self.state = MAP
 
-    def run(self):
+    def Running(self):
         while True:
             if self.state == MAP:
-                self.home_draw()
-                self.home_event()
+                self.DrawHome()
+                self.EventHome()
 
             elif self.state == RUNNING:
                 self.state = TRYBEST
@@ -165,11 +158,11 @@ class Graphic:
                 self.wumpus = Wumpus(x, y)
                 self.wumpus.wumpus_notification()
 
-                self.running_draw()
+                self.RunningDraw()
 
                 for action in action_list:
                     pygame.time.delay(SPEED)
-                    self.display_action(action)
+                    self.DisplayAction(action)
 
                     if action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
                         self.state = WIN
@@ -184,169 +177,19 @@ class Graphic:
                             sys.exit()
 
             elif self.state == WIN or self.state == TRYBEST:
-                self.win_draw()
-                self.win_event()
+                self.DrawStatusWin()
+                self.EventWin()
 
             self.clock.tick(60)
 
-
-    def display_action(self, action: LogicAlgorithms.Action):
-        if action == LogicAlgorithms.Action.TURN_LEFT:
-            self.direct = self.agent.turn_left()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-        elif action == LogicAlgorithms.Action.TURN_RIGHT:
-            self.direct = self.agent.turn_right()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-        elif action == LogicAlgorithms.Action.TURN_UP:
-            self.direct = self.agent.turn_up()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-        elif action == LogicAlgorithms.Action.TURN_DOWN:
-            self.direct = self.agent.turn_down()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-        elif action == LogicAlgorithms.Action.MOVE_FORWARD:
-            self.agent.move_forward(self.direct)
-            i, j = self.agent.get_pos()
-            self.map.discover_cell_i_j(i, j)
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-        elif action == LogicAlgorithms.Action.GRAB_GOLD:
-            self.agent.grab_gold()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            self.gold.grab_gold(self.screen, self.font)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-            pygame.time.delay(500)
-        elif action == LogicAlgorithms.Action.PERCEIVE_BREEZE:
-            pass
-        elif action == LogicAlgorithms.Action.PERCEIVE_STENCH:
-            pass
-        elif action == LogicAlgorithms.Action.SHOOT:
-            self.agent.shoot()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            i, j = self.agent.get_pos()
-            self.arrow.Shoot(self.direct, self.screen, i, j)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-            pygame.time.delay(500)
-        elif action == LogicAlgorithms.Action.KILL_WUMPUS:
-
-            i, j = self.agent.get_pos()
-            if self.direct == 0:
-                i -= 1
-            elif self.direct == 1:
-                i += 1
-            elif self.direct == 2:
-                j -= 1
-            elif self.direct == 3:
-                j += 1
-            self.wumpus.wumpus_killed(i, j)
-            self.wumpus.wumpus_notification()
-            i, j = self.agent.get_pos()
-            if not self.wumpus.stench_i_j(i, j):
-                self.wumpus.wumpus_kill(self.screen, self.font)
-            temp = self.map.discovered()
-            self.wumpus.update(self.screen, self.noti, temp)
-            self.pit.update(self.screen, self.noti, temp)
-            pygame.display.update()
-            pygame.time.delay(500)
-            pass
-        elif action == LogicAlgorithms.Action.KILL_NO_WUMPUS:
-            pass
-        elif action == LogicAlgorithms.Action.BE_EATEN_BY_WUMPUS:
-            self.agent.wumpus_or_pit_collision()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            pygame.display.update()
-            self.state = GAMEOVER
-        elif action == LogicAlgorithms.Action.FALL_INTO_PIT:
-            self.agent.wumpus_or_pit_collision()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            pygame.display.update()
-            self.state = GAMEOVER
-        elif action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
-            #
-            self.state = WIN
-            pass
-        elif action == LogicAlgorithms.Action.CLIMB_OUT_OF_THE_CAVE:
-            self.agent.climb()
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            self.map.agent_climb(self.screen, self.font)
-            pygame.display.update()
-            pygame.time.delay(2000)
-        elif action == LogicAlgorithms.Action.DECTECT_PIT:
-            i, j = self.agent.get_pos()
-            if self.direct == 0:
-                i -= 1
-            elif self.direct == 1:
-                i += 1
-            elif self.direct == 2:
-                j -= 1
-            elif self.direct == 3:
-                j += 1
-            self.map.pit_detect(i, j)
-            self.all_sprites.update()
-            self.running_draw()
-            self.all_sprites.draw(self.screen)
-            pygame.time.delay(1000)
-        elif action == LogicAlgorithms.Action.DETECT_WUMPUS:
-            pass
-        elif action == LogicAlgorithms.Action.DETECT_NO_PIT:
-            pass
-        elif action == LogicAlgorithms.Action.DETECT_NO_WUMPUS:
-            pass
-        elif action == LogicAlgorithms.Action.INFER_PIT:
-            pass
-        elif action == LogicAlgorithms.Action.INFER_NOT_PIT:
-            pass
-        elif action == LogicAlgorithms.Action.INFER_WUMPUS:
-            pass
-        elif action == LogicAlgorithms.Action.INFER_NOT_WUMPUS:
-            pass
-        elif action == LogicAlgorithms.Action.DETECT_SAFE:
-            pass
-        elif action == LogicAlgorithms.Action.INFER_SAFE:
-            pass
-        else:
-            raise TypeError("Error: " + self.display_action.__name__)
+    def DisplayAction(self, action: LogicAlgorithms.Action):
+       DisplayActionLogic(self, action)
+        
+    def RunningDraw(self):
+        self.screen.fill(WHITE)
+        self.map.draw(self.screen)
+        score = self.agent.get_score()
+        text = self.font.render('Score: ' + str(score), True, BLACK)
+        textRect = text.get_rect()
+        textRect.center = (820, 25)
+        self.screen.blit(text, textRect)

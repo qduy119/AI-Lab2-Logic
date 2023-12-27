@@ -6,30 +6,12 @@ class KnowledgeBase:
     def __init__(self):
         self.KB = []
 
-    @staticmethod
-    def standardize_clause(clause):
-        return sorted(list(set(clause)))
-
-    def add_clause(self, clause):
-        clause = self.standardize_clause(clause)
-        if clause not in self.KB:
-            self.KB.append(clause)
-
-    def del_clause(self, clause):
-        clause = self.standardize_clause(clause)
-        if clause in self.KB:
-            self.KB.remove(clause)
-
-    @staticmethod
-    def is_opposite(literal_1, literal_2):
-        return literal_1 == -literal_2
-
-    def resolve(self, clause_1, clause_2):
+    def Solve(self, clause_1, clause_2):
         temp_1 = []
         temp_2 = []
         for literal_1 in clause_1:
             for literal_2 in clause_2:
-                if self.is_opposite(literal_1, literal_2):
+                if self.IsOpposite(literal_1, literal_2):
                     temp_1.append(literal_1)
                     temp_2.append(literal_2)
 
@@ -40,14 +22,14 @@ class KnowledgeBase:
         for literal in temp_2:
             temp_clause_2.remove(literal)
 
-        return self.standardize_clause(temp_clause_1 + temp_clause_2)
+        return self.StandardClause(temp_clause_1 + temp_clause_2)
 
-    def pl_resolution(self, not_alpha):
+    def ReSolve(self, not_alpha):
         clause_list = copy.deepcopy(self.KB)
         negative_alpha = not_alpha
 
         for clause in negative_alpha:
-            clause = self.standardize_clause(clause)
+            clause = self.StandardClause(clause)
             if clause not in clause_list:
                 clause_list.append(clause)
 
@@ -65,7 +47,26 @@ class KnowledgeBase:
                 return False
             pre_pre_clause_list_len = pre_clause_list_len
 
-    def infer(self, not_alpha):
+    def InsertClause(self, clause):
+        clause = self.StandardClause(clause)
+        if clause not in self.KB:
+            self.KB.append(clause)
+
+    def DeleteClause(self, clause):
+        clause = self.StandardClause(clause)
+        if clause in self.KB:
+            self.KB.remove(clause)
+
+    @staticmethod
+    def IsOpposite(literal_1, literal_2):
+        return literal_1 == -literal_2
+
+    @staticmethod
+    def StandardClause(clause):
+        return sorted(list(set(clause)))
+    
+
+    def Inference(self, not_alpha):
         g = Glucose3()
         clause_list = copy.deepcopy(self.KB)
         negative_alpha = not_alpha
