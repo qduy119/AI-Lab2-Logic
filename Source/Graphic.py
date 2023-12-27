@@ -32,7 +32,7 @@ class Graphic:
         self.screen.fill(WHITE)
         self.map.draw(self.screen)
         score = self.agent.get_score()
-        text = self.font.render('Your score: ' + str(score), True, BLACK)
+        text = self.font.render('Score: ' + str(score), True, BLACK)
         textRect = text.get_rect()
         textRect.center = (820, 25)
         self.screen.blit(text, textRect)
@@ -106,14 +106,14 @@ class Graphic:
         if self.state == WIN:
             text = self.victory.render('VICTORY!!!', True, BLACK)
         elif self.state == TRYBEST:
-            text = self.victory.render('TRY BEST!!!', True, BLACK)
+            text = self.victory.render('TRY AGAIN!!!', True, BLACK)
 
         textRect = text.get_rect()
         textRect.center = (500, 50)
         self.screen.blit(text, textRect)
         score = self.agent.get_score()
-        text = self.victory.render('Your score: ' + str(score), True, BLACK)
-        textRect.center = (450, 100)
+        text = self.victory.render('Score: ' + str(score), True, BLACK)
+        textRect.center = (500, 100)
         self.screen.blit(text, textRect)
 
     def win_event(self):
