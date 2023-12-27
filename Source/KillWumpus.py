@@ -1,30 +1,30 @@
 from ObjectEnum import Object
 
 def KillWumpus(self, cell_matrix, kb):
-        self.percept[2] = False
+    self.percept[2] = False
 
-        adj_cell_list_of_wumpus_cell = self.get_adj_cell_list(cell_matrix)
-        for stench_cell in adj_cell_list_of_wumpus_cell:
-            del_stench_flag = True
-            adj_cell_list_of_stench_cell = stench_cell.get_adj_cell_list(cell_matrix)
-            for adj_cell in adj_cell_list_of_stench_cell:
-                if adj_cell.exist_wumpus():
-                    del_stench_flag = False
-                    break
-            if del_stench_flag:
-                stench_cell.percept[4] = False
-                literal = self.get_literal(Object.STENCH, '+')
-                kb.del_clause([literal])
-                literal = self.get_literal(Object.STENCH, '-')
-                kb.add_clause([literal])
+    AdjCellListOfWumpus = self.get_adj_cell_list(cell_matrix)
+    for StenchCell in AdjCellListOfWumpus:
+        DeleteStenchFlag = True
+        AdjCellListOfStench = StenchCell.get_adj_cell_list(cell_matrix)
+        for AdjCell in AdjCellListOfStench:
+            if AdjCell.exist_wumpus():
+                DeleteStenchFlag = False
+                break
+        if DeleteStenchFlag:
+            StenchCell.percept[4] = False
+            literal = self.get_literal(Object.STENCH, '+')
+            kb.DeleteClause([literal])
+            literal = self.get_literal(Object.STENCH, '-')
+            kb.InsertClause([literal])
 
-                adj_cell_list = stench_cell.get_adj_cell_list(cell_matrix)
-                clause = [stench_cell.get_literal(Object.STENCH, '-')]
-                for adj_cell in adj_cell_list:
-                    clause.append(adj_cell.get_literal(Object.WUMPUS, '+'))
-                kb.del_clause(clause)
+            AdjCellList = StenchCell.get_adj_cell_list(cell_matrix)
+            clause = [StenchCell.get_literal(Object.STENCH, '-')]
+            for AdjCell in AdjCellList:
+                clause.append(AdjCell.get_literal(Object.WUMPUS, '+'))
+            kb.DeleteClause(clause)
 
-                for adj_cell in adj_cell_list:
-                    clause = [stench_cell.get_literal(Object.STENCH, '+'),
-                              adj_cell.get_literal(Object.WUMPUS, '-')]
-                    kb.del_clause(clause)
+            for AdjCell in AdjCellList:
+                clause = [StenchCell.get_literal(Object.STENCH, '+'),
+                            AdjCell.get_literal(Object.WUMPUS, '-')]
+                kb.DeleteClause(clause)
