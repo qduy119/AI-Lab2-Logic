@@ -49,9 +49,9 @@ FONT_MRSMONSTER = '../Assets/Fonts/mrsmonster.ttf'
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-LIGHT_GREY = (170, 170, 170)
-DARK_GREY = (75, 75, 75)
-RED = (255, 0, 0)
+LIGHT_GREY = (150, 150, 150)
+DARK_GREY = (190, 190, 190)
+RED = (0, 0, 0)
 
 # state
 RUNNING = 'running'

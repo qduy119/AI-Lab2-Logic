@@ -8,13 +8,13 @@ class Gold:
         self.pos = (835, 100)
 
     def grab_gold(self, screen, font):
-        text = font.render('You found a gold!!!', True, BLACK)
+        text = font.render('Find a chest!!!', True, BLACK)
         textRect = text.get_rect()
         textRect.center = self.pos
         screen.blit(text, textRect)
         screen.blit(self.image, (750, 200))
         text = font.render('Score + 100', True, BLACK)
-        textRect.center = (900, 600)
+        textRect.center = (850, 600)
         screen.blit(text, textRect)
         pygame.display.update()
 

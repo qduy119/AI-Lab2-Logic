@@ -11,7 +11,7 @@ class Cell:
         self.map_size = map_size
 
         self.explored = False
-        self.percept = [False, False, False, False, False]  # [-G, -P, -W, -B, -S]
+        self.percept = [False, False, False, False, False]
         self.init(objects_str)
 
         self.parent = None

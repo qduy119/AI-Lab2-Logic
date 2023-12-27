@@ -2,167 +2,160 @@ import Cell
 from ActionEnum import Action
 
 def BacktrackingSearchAlgorithm(self):
-    
-    if self.agent_cell.exist_pit():
-        self.AddAction(Action.FALL_INTO_PIT)
-        return False
 
-    if self.agent_cell.exist_wumpus():
+    if self.AgentCell.exist_wumpus():
         self.AddAction(Action.BE_EATEN_BY_WUMPUS)
         return False
 
+    if not self.AgentCell.is_explored():
+        self.AgentCell.explore()
+        self.AddNewPerceptIntoKB(self.AgentCell)
     if self.gold_list.__len__() == 0 and self.wumpus_list.__len__() == 0:
         self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
         return True
 
-    if self.agent_cell.exist_gold():
-        print("len gold: " + str(self.gold_list.__len__()))
+    if self.AgentCell.exist_gold():
         self.AddAction(Action.GRAB_GOLD)
-        self.gold_list.remove(self.agent_cell)
-        self.agent_cell.grab_gold()
-        print("len gold: " + str(self.gold_list.__len__()) )
+        self.gold_list.remove(self.AgentCell)
+        self.AgentCell.grab_gold()
 
 
-    if self.agent_cell.exist_breeze():
+    if self.AgentCell.exist_breeze():
         self.AddAction(Action.PERCEIVE_BREEZE)
-        
-    if self.agent_cell.exist_stench():
+
+    if self.AgentCell.exist_stench():
         self.AddAction(Action.PERCEIVE_STENCH)
 
-    if not self.agent_cell.is_explored():
-        self.agent_cell.explore()
-        self.AddNewPerceptIntoKB(self.agent_cell)
 
-    valid_adj_cell_list = self.agent_cell.get_adj_cell_list(self.cell_matrix)
+    if self.AgentCell.exist_pit():
+        self.AddAction(Action.FALL_INTO_PIT)
+        return False
 
-    temp_adj_cell_list = []
-    if self.agent_cell.parent in valid_adj_cell_list:
-        valid_adj_cell_list.remove(self.agent_cell.parent)
+    ValidAdjCellList = self.AgentCell.get_adj_cell_list(self.cell_matrix)
 
-    pre_agent_cell = self.agent_cell
+    TempAdjCellList = []
+    if self.AgentCell.parent in ValidAdjCellList:
+        ValidAdjCellList.remove(self.AgentCell.parent)
 
-    if not self.agent_cell.is_OK():
-        temp_adj_cell_list = []
-        for valid_adj_cell in valid_adj_cell_list:
-            if valid_adj_cell.is_explored() and valid_adj_cell.exist_pit():
-                temp_adj_cell_list.append(valid_adj_cell)
-        for adj_cell in temp_adj_cell_list:
-            valid_adj_cell_list.remove(adj_cell)
+    pre_agent_cell = self.AgentCell
 
-        temp_adj_cell_list = []
+    if not self.AgentCell.is_OK():
+        TempAdjCellList = []
+        for ValidAdjCell in ValidAdjCellList:
+            if ValidAdjCell.is_explored() and ValidAdjCell.exist_pit():
+                TempAdjCellList.append(ValidAdjCell)
+        for AdjCell in TempAdjCellList:
+            ValidAdjCellList.remove(AdjCell)
 
-        if self.agent_cell.exist_stench():
-            valid_adj_cell: Cell.Cell
-            for valid_adj_cell in valid_adj_cell_list:
+        TempAdjCellList = []
+
+        if self.AgentCell.exist_stench():
+            ValidAdjCell: Cell.Cell
+            for ValidAdjCell in ValidAdjCellList:
                 print("Infer: ", end="")
-                print(valid_adj_cell.map_pos)
+                print(ValidAdjCell.map_pos)
                 self.AppendEventToOutputFile(
-                    "Infer: " + str(valid_adj_cell.map_pos)
+                    "Infer: " + str(ValidAdjCell.map_pos)
                 )
-                self.DirectionMove(valid_adj_cell)
+                self.DirectionMove(ValidAdjCell)
 
                 self.AddAction(Action.INFER_WUMPUS)
-                not_alpha = [[valid_adj_cell.get_literal(Cell.Object.WUMPUS, "-")]]
-                have_wumpus = self.KB.infer(not_alpha)
+                not_alpha = [[ValidAdjCell.get_literal(Cell.Object.WUMPUS, "-")]]
+                have_wumpus = self.KB.Inference(not_alpha)
 
                 if have_wumpus:
                     self.AddAction(Action.DETECT_WUMPUS)
                     self.AddAction(Action.SHOOT)
                     self.AddAction(Action.KILL_WUMPUS)
-                    self.wumpus_list.remove(valid_adj_cell)
-                    valid_adj_cell.kill_wumpus(self.cell_matrix, self.KB)
+                    self.wumpus_list.remove(ValidAdjCell)
+                    ValidAdjCell.kill_wumpus(self.cell_matrix, self.KB)
                     self.AppendEventToOutputFile("KB: " + str(self.KB.KB))
-                    print("len wp: " +str(self.wumpus_list.__len__()) )
-
-
                 else:
                     self.AddAction(Action.INFER_NOT_WUMPUS)
                     not_alpha = [
-                        [valid_adj_cell.get_literal(Cell.Object.WUMPUS, "+")]
+                        [ValidAdjCell.get_literal(Cell.Object.WUMPUS, "+")]
                     ]
-                    have_no_wumpus = self.KB.infer(not_alpha)
+                    have_no_wumpus = self.KB.Inference(not_alpha)
 
                     if have_no_wumpus:
                         self.AddAction(Action.DETECT_NO_WUMPUS)
                     else:
-                        if valid_adj_cell not in temp_adj_cell_list:
-                            temp_adj_cell_list.append(valid_adj_cell)
+                        if ValidAdjCell not in TempAdjCellList:
+                            TempAdjCellList.append(ValidAdjCell)
 
-        if self.agent_cell.exist_stench():
-            adj_cell_list = self.agent_cell.get_adj_cell_list(self.cell_matrix)
-            if self.agent_cell.parent in adj_cell_list:
-                adj_cell_list.remove(self.agent_cell.parent)
+        if self.AgentCell.exist_stench():
+            AdjCellList = self.AgentCell.get_adj_cell_list(self.cell_matrix)
+            if self.AgentCell.parent in AdjCellList:
+                AdjCellList.remove(self.AgentCell.parent)
 
             explored_cell_list = []
-            for adj_cell in adj_cell_list:
-                if adj_cell.is_explored():
-                    explored_cell_list.append(adj_cell)
+            for AdjCell in AdjCellList:
+                if AdjCell.is_explored():
+                    explored_cell_list.append(AdjCell)
             for explored_cell in explored_cell_list:
-                adj_cell_list.remove(explored_cell)
+                AdjCellList.remove(explored_cell)
 
-            for adj_cell in adj_cell_list:
+            for AdjCell in AdjCellList:
                 print("Try: ", end="")
-                print(adj_cell.map_pos)
-                self.AppendEventToOutputFile("Try: " + str(adj_cell.map_pos))
-                self.DirectionMove(adj_cell)
+                print(AdjCell.map_pos)
+                self.AppendEventToOutputFile("Try: " + str(AdjCell.map_pos))
+                self.DirectionMove(AdjCell)
 
                 self.AddAction(Action.SHOOT)
-                if adj_cell.exist_wumpus():
-                    self.wumpus_list.remove(adj_cell)
-                    print("len wp: " +str(self.wumpus_list.__len__()) )
-
+                if AdjCell.exist_wumpus():
+                    self.wumpus_list.remove(AdjCell)
                     self.AddAction(Action.KILL_WUMPUS)
-                    adj_cell.kill_wumpus(self.cell_matrix, self.KB)
+                    AdjCell.kill_wumpus(self.cell_matrix, self.KB)
                     self.AppendEventToOutputFile("KB: " + str(self.KB.KB))
 
-                if not self.agent_cell.exist_stench():
-                    self.agent_cell.update_child_list([adj_cell])
+                if not self.AgentCell.exist_stench():
+                    self.AgentCell.update_child_list([AdjCell])
                     break
 
-        if self.agent_cell.exist_breeze():
-            valid_adj_cell: Cell.Cell
-            for valid_adj_cell in valid_adj_cell_list:
+        if self.AgentCell.exist_breeze():
+            ValidAdjCell: Cell.Cell
+            for ValidAdjCell in ValidAdjCellList:
                 print("Infer: ", end="")
-                print(valid_adj_cell.map_pos)
+                print(ValidAdjCell.map_pos)
                 self.AppendEventToOutputFile(
-                    "Infer: " + str(valid_adj_cell.map_pos)
+                    "Infer: " + str(ValidAdjCell.map_pos)
                 )
-                self.DirectionMove(valid_adj_cell)
+                self.DirectionMove(ValidAdjCell)
 
                 self.AddAction(Action.INFER_PIT)
-                not_alpha = [[valid_adj_cell.get_literal(Cell.Object.PIT, "-")]]
-                have_pit = self.KB.infer(not_alpha)
+                not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "-")]]
+                have_pit = self.KB.Inference(not_alpha)
 
                 if have_pit:
                     self.AddAction(Action.DECTECT_PIT)
-                    valid_adj_cell.explore()
-                    self.AddNewPerceptIntoKB(valid_adj_cell)
-                    valid_adj_cell.update_parent(valid_adj_cell)
-                    temp_adj_cell_list.append(valid_adj_cell)
+                    ValidAdjCell.explore()
+                    self.AddNewPerceptIntoKB(ValidAdjCell)
+                    ValidAdjCell.update_parent(ValidAdjCell)
+                    TempAdjCellList.append(ValidAdjCell)
 
                 else:
                     self.AddAction(Action.INFER_NOT_PIT)
-                    not_alpha = [[valid_adj_cell.get_literal(Cell.Object.PIT, "+")]]
-                    have_no_pit = self.KB.infer(not_alpha)
+                    not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "+")]]
+                    have_no_pit = self.KB.Inference(not_alpha)
 
                     if have_no_pit:
                         self.AddAction(Action.DETECT_NO_PIT)
 
                     else:
-                        temp_adj_cell_list.append(valid_adj_cell)
+                        TempAdjCellList.append(ValidAdjCell)
 
-    temp_adj_cell_list = list(set(temp_adj_cell_list))
+    TempAdjCellList = list(set(TempAdjCellList))
 
-    for adj_cell in temp_adj_cell_list:
-        valid_adj_cell_list.remove(adj_cell)
-    self.agent_cell.update_child_list(valid_adj_cell_list)
+    for AdjCell in TempAdjCellList:
+        ValidAdjCellList.remove(AdjCell)
+    self.AgentCell.update_child_list(ValidAdjCellList)
 
-    for next_cell in self.agent_cell.child_list:
+    for next_cell in self.AgentCell.child_list:
         self.MoveTo(next_cell)
         print("Move to: ", end="")
-        print(self.agent_cell.map_pos)
-        self.AppendEventToOutputFile("Move to: " + str(self.agent_cell.map_pos))
-        
+        print(self.AgentCell.map_pos)
+        self.AppendEventToOutputFile("Move to: " + str(self.AgentCell.map_pos))
+
         if not BacktrackingSearchAlgorithm(self):
             return False
         if self.action_list[-1] == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:

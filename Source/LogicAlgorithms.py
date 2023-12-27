@@ -15,7 +15,7 @@ class AgentBrain:
         self.init_cell_matrix = None
 
         self.cave_cell = Cell.Cell((-1, -1), 10, Cell.Object.EMPTY.value)
-        self.agent_cell = None
+        self.AgentCell = None
         self.wumpus_list = []
         self.gold_list = []
 
@@ -26,6 +26,62 @@ class AgentBrain:
         self.score = 0
 
         self.ReadMap(map_filename)
+
+    def BacktrackingSearch(self):
+        BacktrackingSearchAlgorithm(self)
+
+    def SolveWumpusWorld(self):
+        OutputFile = open(self.output_filename, "w")
+        OutputFile.close()
+
+        self.BacktrackingSearch()
+
+        WinFlag = True
+        '''for row in self.cell_matrix:
+            for cell in row:
+                if cell.exist_gold() or cell.exist_wumpus():
+                    WinFlag = False
+                    break
+        if WinFlag:
+            self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
+'''
+        if self.AgentCell.parent == self.cave_cell:
+            self.AddAction(Action.CLIMB_OUT_OF_THE_CAVE)
+
+        return self.action_list, self.init_agent_cell, self.init_cell_matrix
+
+    def AddNewPerceptIntoKB(self, cell):
+        AddPerceptToKnowledgeBase(self, cell)
+
+
+    def AppendEventToOutputFile(self, text: str):
+        OutputFile = open(self.output_filename, "a")
+        OutputFile.write(text + "\n")
+        OutputFile.close()
+
+    def AddAction(self, action):
+        AddActionLogic(self, action)
+
+
+    def DirectionMove(self, next_cell):
+        if next_cell.map_pos[0] == self.AgentCell.map_pos[0]:
+            if next_cell.map_pos[1] - self.AgentCell.map_pos[1] == 1:
+                self.AddAction(Action.TURN_UP)
+            else:
+                self.AddAction(Action.TURN_DOWN)
+        elif next_cell.map_pos[1] == self.AgentCell.map_pos[1]:
+            if next_cell.map_pos[0] - self.AgentCell.map_pos[0] == 1:
+                self.AddAction(Action.TURN_RIGHT)
+            else:
+                self.AddAction(Action.TURN_LEFT)
+        else:
+            raise TypeError("Error: " + self.DirectionMove.__name__)
+
+    def MoveTo(self, next_cell):
+        self.DirectionMove(next_cell)
+        self.AddAction(Action.MOVE_FORWARD)
+        self.AgentCell = next_cell
+
 
     def ReadMap(self, map_filename):
         file = open(map_filename, "r")
@@ -46,9 +102,9 @@ class AgentBrain:
                 if self.cell_matrix[ir][ic].exist_wumpus():
                     self.wumpus_list.append(self.cell_matrix[ir][ic])
                 if Cell.Object.AGENT.value in raw_map[ir][ic]:
-                    self.agent_cell = self.cell_matrix[ir][ic]
-                    self.agent_cell.update_parent(self.cave_cell)
-                    self.init_agent_cell = copy.deepcopy(self.agent_cell)
+                    self.AgentCell = self.cell_matrix[ir][ic]
+                    self.AgentCell.update_parent(self.cave_cell)
+                    self.init_agent_cell = copy.deepcopy(self.AgentCell)
 
         file.close()
         self.init_cell_matrix = copy.deepcopy(self.cell_matrix)
@@ -64,7 +120,7 @@ class AgentBrain:
                 + str(pos[1])
                 + "."
             )
-
+        
     def IsValidMap(self):
         for cell_row in self.cell_matrix:
             for cell in cell_row:
@@ -77,59 +133,6 @@ class AgentBrain:
                     for adj_cell in adj_cell_list:
                         if not adj_cell.exist_stench():
                             return False, cell.matrix_pos
-        if self.agent_cell is None:
+        if self.AgentCell is None:
             return False, None
         return True, None
-
-    def AppendEventToOutputFile(self, text: str):
-        out_file = open(self.output_filename, "a")
-        out_file.write(text + "\n")
-        out_file.close()
-
-    def AddAction(self, action):
-        AddActionLogic(self, action)
-
-    def AddNewPerceptIntoKB(self, cell):
-        AddPerceptToKnowledgeBase(self, cell)
-
-    def DirectionMove(self, next_cell):
-        if next_cell.map_pos[0] == self.agent_cell.map_pos[0]:
-            if next_cell.map_pos[1] - self.agent_cell.map_pos[1] == 1:
-                self.AddAction(Action.TURN_UP)
-            else:
-                self.AddAction(Action.TURN_DOWN)
-        elif next_cell.map_pos[1] == self.agent_cell.map_pos[1]:
-            if next_cell.map_pos[0] - self.agent_cell.map_pos[0] == 1:
-                self.AddAction(Action.TURN_RIGHT)
-            else:
-                self.AddAction(Action.TURN_LEFT)
-        else:
-            raise TypeError("Error: " + self.DirectionMove.__name__)
-
-    def MoveTo(self, next_cell):
-        self.DirectionMove(next_cell)
-        self.AddAction(Action.MOVE_FORWARD)
-        self.agent_cell = next_cell
-
-    def BacktrackingSearch(self):
-        BacktrackingSearchAlgorithm(self)
-
-    def SolveWumpusWorld(self):
-        out_file = open(self.output_filename, "w")
-        out_file.close()
-
-        self.BacktrackingSearch()
-
-        victory_flag = True
-        #for cell_row in self.cell_matrix:
-         #   for cell in cell_row:
-         #       if cell.exist_gold() or cell.exist_wumpus():
-          #          victory_flag = False
-           #         break
-        #if victory_flag:
-        #    self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
-
-        if self.agent_cell.parent == self.cave_cell:
-            self.AddAction(Action.CLIMB_OUT_OF_THE_CAVE)
-
-        return self.action_list, self.init_agent_cell, self.init_cell_matrix
