@@ -1,6 +1,10 @@
 import pygame
 from Specification import *
-from Objects import *
+
+from PitObject import *
+from ArrowObject import *
+from WumpusObject import *
+from GoldObject import *
 
 class Agent(pygame.sprite.Sprite):
     def __init__(self, x, y):

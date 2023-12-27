@@ -1,15 +1,14 @@
 from pysat.solvers import Glucose3
 import copy
 
+
 class KnowledgeBase:
     def __init__(self):
         self.KB = []
 
-
     @staticmethod
     def standardize_clause(clause):
         return sorted(list(set(clause)))
-
 
     def add_clause(self, clause):
         clause = self.standardize_clause(clause)
@@ -24,7 +23,6 @@ class KnowledgeBase:
     @staticmethod
     def is_opposite(literal_1, literal_2):
         return literal_1 == -literal_2
-
 
     def resolve(self, clause_1, clause_2):
         temp_1 = []
@@ -43,7 +41,6 @@ class KnowledgeBase:
             temp_clause_2.remove(literal)
 
         return self.standardize_clause(temp_clause_1 + temp_clause_2)
-
 
     def pl_resolution(self, not_alpha):
         # clause_list = KB ^ not alpha
@@ -68,7 +65,6 @@ class KnowledgeBase:
             if len(clause_list) == pre_clause_list_len:
                 return False
             pre_pre_clause_list_len = pre_clause_list_len
-
 
     def infer(self, not_alpha):
         g = Glucose3()

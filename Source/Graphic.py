@@ -1,7 +1,7 @@
 import sys
 from Map import *
 from Agent import *
-import Algorithms
+import LogicAlgorithms
 
 class Graphic:
     def __init__(self):
@@ -134,7 +134,7 @@ class Graphic:
             elif self.state == RUNNING:
                 self.state = TRYBEST
 
-                action_list, cave_cell, cell_matrix = Algorithms.AgentBrain(MAP_LIST[self.map_i - 1], OUTPUT_LIST[self.map_i - 1]).solve_wumpus_world()
+                action_list, cave_cell, cell_matrix = LogicAlgorithms.AgentBrain(MAP_LIST[self.map_i - 1], OUTPUT_LIST[self.map_i - 1]).SolveWumpusWorld()
                 map_pos = cave_cell.map_pos
 
                 self.map = Map((len(cell_matrix) - map_pos[1] + 1, map_pos[0]))
@@ -172,10 +172,10 @@ class Graphic:
                     self.display_action(action)
                     # print(action)
 
-                    if action == Algorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+                    if action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
                         self.state = WIN
 
-                    if action == Algorithms.Action.FALL_INTO_PIT or action == Algorithms.Action.BE_EATEN_BY_WUMPUS:
+                    if action == LogicAlgorithms.Action.FALL_INTO_PIT or action == LogicAlgorithms.Action.BE_EATEN_BY_WUMPUS:
                         self.state = GAMEOVER
                         break
 
@@ -191,8 +191,8 @@ class Graphic:
             self.clock.tick(60)
 
 
-    def display_action(self, action: Algorithms.Action):
-        if action == Algorithms.Action.TURN_LEFT:
+    def display_action(self, action: LogicAlgorithms.Action):
+        if action == LogicAlgorithms.Action.TURN_LEFT:
             self.direct = self.agent.turn_left()
             self.all_sprites.update()
             self.running_draw()
@@ -201,7 +201,7 @@ class Graphic:
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
-        elif action == Algorithms.Action.TURN_RIGHT:
+        elif action == LogicAlgorithms.Action.TURN_RIGHT:
             self.direct = self.agent.turn_right()
             self.all_sprites.update()
             self.running_draw()
@@ -210,7 +210,7 @@ class Graphic:
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
-        elif action == Algorithms.Action.TURN_UP:
+        elif action == LogicAlgorithms.Action.TURN_UP:
             self.direct = self.agent.turn_up()
             self.all_sprites.update()
             self.running_draw()
@@ -219,7 +219,7 @@ class Graphic:
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
-        elif action == Algorithms.Action.TURN_DOWN:
+        elif action == LogicAlgorithms.Action.TURN_DOWN:
             self.direct = self.agent.turn_down()
             self.all_sprites.update()
             self.running_draw()
@@ -228,7 +228,7 @@ class Graphic:
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
-        elif action == Algorithms.Action.MOVE_FORWARD:
+        elif action == LogicAlgorithms.Action.MOVE_FORWARD:
             self.agent.move_forward(self.direct)
             i, j = self.agent.get_pos()
             self.map.discover_cell_i_j(i, j)
@@ -239,7 +239,7 @@ class Graphic:
             self.wumpus.update(self.screen, self.noti, temp)
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
-        elif action == Algorithms.Action.GRAB_GOLD:
+        elif action == LogicAlgorithms.Action.GRAB_GOLD:
             self.agent.grab_gold()
             self.all_sprites.update()
             self.running_draw()
@@ -250,11 +250,11 @@ class Graphic:
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
             pygame.time.delay(500)
-        elif action == Algorithms.Action.PERCEIVE_BREEZE:
+        elif action == LogicAlgorithms.Action.PERCEIVE_BREEZE:
             pass
-        elif action == Algorithms.Action.PERCEIVE_STENCH:
+        elif action == LogicAlgorithms.Action.PERCEIVE_STENCH:
             pass
-        elif action == Algorithms.Action.SHOOT:
+        elif action == LogicAlgorithms.Action.SHOOT:
             self.agent.shoot()
             self.all_sprites.update()
             self.running_draw()
@@ -266,7 +266,7 @@ class Graphic:
             self.pit.update(self.screen, self.noti, temp)
             pygame.display.update()
             pygame.time.delay(500)
-        elif action == Algorithms.Action.KILL_WUMPUS:
+        elif action == LogicAlgorithms.Action.KILL_WUMPUS:
 
             i, j = self.agent.get_pos()
             if self.direct == 0:
@@ -288,27 +288,27 @@ class Graphic:
             pygame.display.update()
             pygame.time.delay(500)
             pass
-        elif action == Algorithms.Action.KILL_NO_WUMPUS:
+        elif action == LogicAlgorithms.Action.KILL_NO_WUMPUS:
             pass
-        elif action == Algorithms.Action.BE_EATEN_BY_WUMPUS:
+        elif action == LogicAlgorithms.Action.BE_EATEN_BY_WUMPUS:
             self.agent.wumpus_or_pit_collision()
             self.all_sprites.update()
             self.running_draw()
             self.all_sprites.draw(self.screen)
             pygame.display.update()
             self.state = GAMEOVER
-        elif action == Algorithms.Action.FALL_INTO_PIT:
+        elif action == LogicAlgorithms.Action.FALL_INTO_PIT:
             self.agent.wumpus_or_pit_collision()
             self.all_sprites.update()
             self.running_draw()
             self.all_sprites.draw(self.screen)
             pygame.display.update()
             self.state = GAMEOVER
-        elif action == Algorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+        elif action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
             #
             self.state = WIN
             pass
-        elif action == Algorithms.Action.CLIMB_OUT_OF_THE_CAVE:
+        elif action == LogicAlgorithms.Action.CLIMB_OUT_OF_THE_CAVE:
             self.agent.climb()
             self.all_sprites.update()
             self.running_draw()
@@ -316,7 +316,7 @@ class Graphic:
             self.map.agent_climb(self.screen, self.font)
             pygame.display.update()
             pygame.time.delay(2000)
-        elif action == Algorithms.Action.DECTECT_PIT:
+        elif action == LogicAlgorithms.Action.DECTECT_PIT:
             i, j = self.agent.get_pos()
             if self.direct == 0:
                 i -= 1
@@ -331,23 +331,23 @@ class Graphic:
             self.running_draw()
             self.all_sprites.draw(self.screen)
             pygame.time.delay(1000)
-        elif action == Algorithms.Action.DETECT_WUMPUS:
+        elif action == LogicAlgorithms.Action.DETECT_WUMPUS:
             pass
-        elif action == Algorithms.Action.DETECT_NO_PIT:
+        elif action == LogicAlgorithms.Action.DETECT_NO_PIT:
             pass
-        elif action == Algorithms.Action.DETECT_NO_WUMPUS:
+        elif action == LogicAlgorithms.Action.DETECT_NO_WUMPUS:
             pass
-        elif action == Algorithms.Action.INFER_PIT:
+        elif action == LogicAlgorithms.Action.INFER_PIT:
             pass
-        elif action == Algorithms.Action.INFER_NOT_PIT:
+        elif action == LogicAlgorithms.Action.INFER_NOT_PIT:
             pass
-        elif action == Algorithms.Action.INFER_WUMPUS:
+        elif action == LogicAlgorithms.Action.INFER_WUMPUS:
             pass
-        elif action == Algorithms.Action.INFER_NOT_WUMPUS:
+        elif action == LogicAlgorithms.Action.INFER_NOT_WUMPUS:
             pass
-        elif action == Algorithms.Action.DETECT_SAFE:
+        elif action == LogicAlgorithms.Action.DETECT_SAFE:
             pass
-        elif action == Algorithms.Action.INFER_SAFE:
+        elif action == LogicAlgorithms.Action.INFER_SAFE:
             pass
         else:
             raise TypeError("Error: " + self.display_action.__name__)
