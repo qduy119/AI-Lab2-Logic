@@ -1,4 +1,3 @@
-
 from ActionEnum import Action
 
 def AddActionLogic(self, action):

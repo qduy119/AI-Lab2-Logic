@@ -108,7 +108,6 @@ class AgentBrain:
         BacktrackingSearchAlgorithm(self)
 
     def SolveWumpusWorld(self):
-        # Reset file output
         out_file = open(self.output_filename, "w")
         out_file.close()
 

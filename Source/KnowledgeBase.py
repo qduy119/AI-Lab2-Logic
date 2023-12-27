@@ -43,7 +43,6 @@ class KnowledgeBase:
         return self.standardize_clause(temp_clause_1 + temp_clause_2)
 
     def pl_resolution(self, not_alpha):
-        # clause_list = KB ^ not alpha
         clause_list = copy.deepcopy(self.KB)
         negative_alpha = not_alpha
 

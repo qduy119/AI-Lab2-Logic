@@ -1,7 +1,7 @@
 import pygame
 
 # Speed
-SPEED = 50          # Change the speed of the game here.
+SPEED = 100
 
 # Window
 SCREEN_WIDTH = 970
