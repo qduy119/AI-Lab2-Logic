@@ -16,6 +16,9 @@ class AgentBrain:
 
         self.cave_cell = Cell.Cell((-1, -1), 10, Cell.Object.EMPTY.value)
         self.agent_cell = None
+        self.wumpus_list = []
+        self.gold_list = []
+
         self.init_agent_cell = None
         self.KB = KnowledgeBase.KnowledgeBase()
         self.path = []
@@ -38,6 +41,10 @@ class AgentBrain:
                 self.cell_matrix[ir][ic] = Cell.Cell(
                     (ir, ic), self.map_size, raw_map[ir][ic]
                 )
+                if self.cell_matrix[ir][ic].exist_gold():
+                    self.gold_list.append(self.cell_matrix[ir][ic])
+                if self.cell_matrix[ir][ic].exist_wumpus():
+                    self.wumpus_list.append(self.cell_matrix[ir][ic])
                 if Cell.Object.AGENT.value in raw_map[ir][ic]:
                     self.agent_cell = self.cell_matrix[ir][ic]
                     self.agent_cell.update_parent(self.cave_cell)
@@ -108,20 +115,19 @@ class AgentBrain:
         BacktrackingSearchAlgorithm(self)
 
     def SolveWumpusWorld(self):
-        # Reset file output
         out_file = open(self.output_filename, "w")
         out_file.close()
 
         self.BacktrackingSearch()
 
         victory_flag = True
-        for cell_row in self.cell_matrix:
-            for cell in cell_row:
-                if cell.exist_gold() or cell.exist_wumpus():
-                    victory_flag = False
-                    break
-        if victory_flag:
-            self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
+        #for cell_row in self.cell_matrix:
+         #   for cell in cell_row:
+         #       if cell.exist_gold() or cell.exist_wumpus():
+          #          victory_flag = False
+           #         break
+        #if victory_flag:
+        #    self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
 
         if self.agent_cell.parent == self.cave_cell:
             self.AddAction(Action.CLIMB_OUT_OF_THE_CAVE)

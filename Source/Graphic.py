@@ -28,6 +28,8 @@ class Graphic:
         self.bg = pygame.transform.scale(self.bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.direct = 3
 
+        self.message = ""
+
     def running_draw(self):
         self.screen.fill(WHITE)
         self.map.draw(self.screen)
@@ -104,26 +106,34 @@ class Graphic:
         self.screen.blit(self.bg, (0, 0))
 
         if self.state == WIN:
-            text = self.victory.render('VICTORY!!!', True, BLACK)
+            text = self.victory.render("VICTORY!!!", True, BLACK)
         elif self.state == TRYBEST:
             text = self.victory.render('TRY BEST!!!', True, BLACK)
-
         textRect = text.get_rect()
         textRect.center = (500, 50)
+        self.screen.blit(text, textRect)  
+
+        text = self.victory.render(self.message, True, BLACK)
+        textRect.center = (350, 125)
         self.screen.blit(text, textRect)
+    
         score = self.agent.get_score()
         text = self.victory.render('Your score: ' + str(score), True, BLACK)
-        textRect.center = (450, 100)
+        textRect.center = (470, 200)
         self.screen.blit(text, textRect)
+        
+
 
     def win_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.state = MAP
         pygame.display.update()
-        pygame.time.delay(200)
-        self.state = MAP
+        #pygame.time.delay(200)
+        #self.state = MAP
 
     def run(self):
         while True:
@@ -170,10 +180,10 @@ class Graphic:
                 for action in action_list:
                     pygame.time.delay(SPEED)
                     self.display_action(action)
-                    # print(action)
 
                     if action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
                         self.state = WIN
+
 
                     if action == LogicAlgorithms.Action.FALL_INTO_PIT or action == LogicAlgorithms.Action.BE_EATEN_BY_WUMPUS:
                         self.state = GAMEOVER
@@ -305,10 +315,11 @@ class Graphic:
             pygame.display.update()
             self.state = GAMEOVER
         elif action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
-            #
+            self.message = "Kill all wumpus and grab all gold!"
             self.state = WIN
             pass
         elif action == LogicAlgorithms.Action.CLIMB_OUT_OF_THE_CAVE:
+            self.message = "Climb out of the cave!"
             self.agent.climb()
             self.all_sprites.update()
             self.running_draw()
