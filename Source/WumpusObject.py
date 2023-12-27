@@ -3,8 +3,8 @@ from Specification import *
 
 class Wumpus:
     def __init__(self, x, y):
-        self.image = pygame.image.load(IMG_WUMPUS).convert()
-        self.image = pygame.transform.scale(self.image, (100, 200))
+        self.image = pygame.image.load(IMG_WUMPUS).convert_alpha()
+        self.image = pygame.transform.scale(self.image, (150, 200))
         self.size = 10
         self.pos = (835, 100)
         self.is_discovered = None
@@ -14,11 +14,11 @@ class Wumpus:
             self.wumpus_pos[x[i]][y[i]] = True
 
     def wumpus_kill(self, screen, font):
-        text = font.render('Killed a wumpus!!!', True, BLACK)
+        text = font.render('Killed a wumpus!!!', True, WHITE)
         textRect = text.get_rect()
         textRect.center = self.pos
         screen.blit(text, textRect)
-        screen.blit(self.image, (800, 200))
+        screen.blit(self.image, (755, 200))
         pygame.display.update()
 
     def wumpus_notification(self):

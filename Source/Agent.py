@@ -10,7 +10,7 @@ class Agent(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.score = 0
-        self.image = pygame.image.load(IMG_HUNTER_RIGHT).convert()
+        self.image = pygame.image.load(IMG_AGENT_RIGHT).convert()
         self.img_list = []
         self.y = 40 + (x-1) * 70
         self.x = 40 + (y-1) * 70
@@ -22,7 +22,7 @@ class Agent(pygame.sprite.Sprite):
 
     def load_image(self):
         self.img_list.append(self.image)
-        temp = [IMG_HUNTER_LEFT, IMG_HUNTER_UP, IMG_HUNTER_DOWN]
+        temp = [IMG_AGENT_LEFT, IMG_AGENT_UP, IMG_AGENT_DOWN]
         for i in range (0, 3):
             img = pygame.image.load(temp[i]).convert()
             self.img_list.append(img)

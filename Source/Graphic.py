@@ -8,6 +8,9 @@ class Graphic:
         pygame.init()
         pygame.font.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.background = pygame.image.load(IMG_BG).convert()
+        self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.logo = pygame.image.load(IMG_WUMPUS_LOGO).convert()
         self.caption = pygame.display.set_caption(CAPTION)
         self.clock = pygame.time.Clock()
         self.map = None
@@ -21,20 +24,20 @@ class Graphic:
         self.victory = pygame.font.Font(FONT_MRSMONSTER, 50)
         self.all_sprites = pygame.sprite.Group()
 
-        self.state = MAP
+        self.state = HOME
         self.map_i = 1
         self.mouse = None
-        self.bg = pygame.image.load('../Assets/Images/win.jpg').convert()
+        self.bg = pygame.image.load(IMG_WINNER).convert()
         self.bg = pygame.transform.scale(self.bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
         self.direct = 3
 
     def running_draw(self):
-        self.screen.fill(WHITE)
+        self.screen.blit(self.background, (0, 0))
         self.map.draw(self.screen)
         score = self.agent.get_score()
-        text = self.font.render('Your score: ' + str(score), True, BLACK)
+        text = self.font.render('Your score: ' + str(score), True, WHITE)
         textRect = text.get_rect()
-        textRect.center = (820, 25)
+        textRect.center = (830, 50)
         self.screen.blit(text, textRect)
 
     def draw_button(self, surf, rect, button_color, text_color, text):
@@ -44,10 +47,75 @@ class Graphic:
         text_rect.center = rect.center
         self.screen.blit(text_surf, text_rect)
 
-    def home_draw(self):
+    def map_draw(self):
         self.screen.fill(WHITE)
 
+    def home_draw(self):
+        self.screen.fill(WHITE)
+        self.screen.blit(self.logo, (410, 50))
+
     def home_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 235 <= self.mouse[0] <= 735 and 380 <= self.mouse[1] <= 430:
+                    self.state = MAP
+                elif 235 <= self.mouse[0] <= 735 and 460 <= self.mouse[1] <= 510:
+                    self.state = ABOUT
+                elif 235 <= self.mouse[0] <= 735 and 540 <= self.mouse[1] <= 590:
+                    pygame.quit()
+                    sys.exit()
+
+            self.mouse = pygame.mouse.get_pos()
+            if 235 <= self.mouse[0] <= 735 and 380 <= self.mouse[1] <= 430:
+                self.draw_button(self.screen, PLAY_POS, DARK_GREY, RED, "PLAY")
+            else:
+                self.draw_button(self.screen, PLAY_POS, LIGHT_GREY, BLACK, "PLAY")
+            if 235 <= self.mouse[0] <= 735 and 460 <= self.mouse[1] <= 510:
+                self.draw_button(self.screen, ABOUT_POS, DARK_GREY, RED, "ABOUT US")
+            else:
+                self.draw_button(self.screen, ABOUT_POS, LIGHT_GREY, BLACK, "ABOUT US")
+            if 235 <= self.mouse[0] <= 735 and 540 <= self.mouse[1] <= 590:
+                self.draw_button(self.screen, EXIT_POS, DARK_GREY, RED, "EXIT")
+            else:
+                self.draw_button(self.screen, EXIT_POS, LIGHT_GREY, BLACK, "EXIT")
+            pygame.display.update()
+
+    def draw_info(self, text, text_color, rect):
+        text_surf = self.font.render(text, True, text_color)
+        text_rect = text_surf.get_rect()
+        text_rect.center = rect.center
+        self.screen.blit(text_surf, text_rect)
+
+    def about_draw(self):
+        self.screen.fill(WHITE)
+        self.draw_info('GROUP MEMBERS', BLACK, TITLE_POS)
+        self.draw_info('21120184 - LE THI MINH THU', BLACK, MEMBER_1_POS)
+        self.draw_info('21120198 - NGUYEN THI LAN ANH', BLACK, MEMBER_2_POS)
+        self.draw_info('21120408 - Dang Tuan Anh', BLACK, MEMBER_3_POS)
+        self.draw_info('21120426 - Huynh Phat Dat', BLACK, MEMBER_4_POS)
+        self.draw_info('21120440 - Chu Quang Duy', BLACK, MEMBER_5_POS)
+        self.draw_button(self.screen, MEMBER_BACK_POS, LIGHT_GREY, BLACK, "BACK")
+
+    def about_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if 235 <= self.mouse[0] <= 735 and 540 <= self.mouse[1] <= 590:
+                    self.state = HOME
+
+        self.mouse = pygame.mouse.get_pos()
+        if 235 <= self.mouse[0] <= 735 and 540 <= self.mouse[1] <= 590:
+            self.draw_button(self.screen, MEMBER_BACK_POS, DARK_GREY, RED, "BACK")
+        else:
+            self.draw_button(self.screen, MEMBER_BACK_POS, LIGHT_GREY, BLACK, "BACK")
+        pygame.display.update()
+
+    def map_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -68,9 +136,8 @@ class Graphic:
                 elif 235 <= self.mouse[0] <= 735 and 440 <= self.mouse[1] <= 490:
                     self.state = RUNNING
                     self.map_i = 5
-                elif 235 <= self.mouse[0] <= 735 and 520 <= self.mouse[1] <= 570:
-                    pygame.quit()
-                    sys.exit()
+                elif 760 <= self.mouse[0] <= 860 and 550 <= self.mouse[1] <= 600:
+                    self.state = HOME
 
             self.mouse = pygame.mouse.get_pos()
             if 235 <= self.mouse[0] <= 735 and 120 <= self.mouse[1] <= 170:
@@ -93,26 +160,26 @@ class Graphic:
                 self.draw_button(self.screen, LEVEL_5_POS, DARK_GREY, RED, "MAP 5")
             else:
                 self.draw_button(self.screen, LEVEL_5_POS, LIGHT_GREY, BLACK, "MAP 5")
-            if 235 <= self.mouse[0] <= 735 and 520 <= self.mouse[1] <= 570:
-                self.draw_button(self.screen, EXIT_POS, DARK_GREY, RED, "EXIT")
+            if 760 <= self.mouse[0] <= 860 and 550 <= self.mouse[1] <= 600:
+                self.draw_button(self.screen, BACK_POS, DARK_GREY, RED, "BACK")
             else:
-                self.draw_button(self.screen, EXIT_POS, LIGHT_GREY, BLACK, "EXIT")
+                self.draw_button(self.screen, BACK_POS, LIGHT_GREY, BLACK, "BACK")
+
             pygame.display.update()
 
     def win_draw(self):
-        self.screen.fill(WHITE)
         self.screen.blit(self.bg, (0, 0))
 
         if self.state == WIN:
-            text = self.victory.render('VICTORY!!!', True, BLACK)
+            text = self.victory.render('VICTORY!!!', True, WHITE)
         elif self.state == TRYBEST:
-            text = self.victory.render('TRY BEST!!!', True, BLACK)
+            text = self.victory.render('TRY BEST!!!', True, WHITE)
 
         textRect = text.get_rect()
         textRect.center = (500, 50)
         self.screen.blit(text, textRect)
         score = self.agent.get_score()
-        text = self.victory.render('Your score: ' + str(score), True, BLACK)
+        text = self.victory.render('Your score: ' + str(score), True, WHITE)
         textRect.center = (450, 100)
         self.screen.blit(text, textRect)
 
@@ -123,14 +190,19 @@ class Graphic:
                 sys.exit()
         pygame.display.update()
         pygame.time.delay(200)
-        self.state = MAP
+        self.state = HOME
 
     def run(self):
         while True:
-            if self.state == MAP:
+            if self.state == HOME:
                 self.home_draw()
                 self.home_event()
-
+            elif self.state == ABOUT:
+                self.about_draw()
+                self.about_event()
+            elif self.state == MAP:
+                self.map_draw()
+                self.map_event()
             elif self.state == RUNNING:
                 self.state = TRYBEST
 
