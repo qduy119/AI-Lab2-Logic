@@ -18,7 +18,7 @@ IMG_PIT = '../Assets/Images/pit.png'
 IMG_WUMPUS = '../Assets/Images/wumpus.png'
 IMG_GOLD = '../Assets/Images/gold.png'
 IMG_WINNER='../Assets/Images/win.png'
-IMG_BG= '../Assets/Images/bg.jpg'
+IMG_BG= '../Assets/Images/background.png'
 
 # Hunter
 IMG_AGENT_RIGHT = '../Assets/Images/agent_right.png'

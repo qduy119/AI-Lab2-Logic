@@ -34,13 +34,13 @@ class Graphic:
 
         self.message = ""
 
-    def running_draw(self):
+    def RunningDraw(self):
         self.screen.blit(self.background, (0, 0))
         self.map.draw(self.screen)
-        score = self.agent.get_score()
-        text = self.font.render('Your score: ' + str(score), True, WHITE)
+        score = self.agent.GetPoint()
+        text = self.font.render('Score: ' + str(score), True, WHITE)
         textRect = text.get_rect()
-        textRect.center = (830, 50)
+        textRect.center = (820, 25)
         self.screen.blit(text, textRect)
 
     def DrawButton(self, surf, rect, button_color, text_color, text):
@@ -273,11 +273,3 @@ class Graphic:
     def DisplayAction(self, action: LogicAlgorithms.Action):
        DisplayActionLogic(self, action)
         
-    def RunningDraw(self):
-        self.screen.fill(WHITE)
-        self.map.draw(self.screen)
-        score = self.agent.GetPoint()
-        text = self.font.render('Score: ' + str(score), True, BLACK)
-        textRect = text.get_rect()
-        textRect.center = (820, 25)
-        self.screen.blit(text, textRect)
