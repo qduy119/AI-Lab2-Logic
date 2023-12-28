@@ -39,7 +39,7 @@ class Cell:
     def exist_gold(self):
         return self.percept[0]
 
-    def exist_pit(self):
+    def exist_hole(self):
         return self.percept[1]
 
     def exist_wumpus(self):
@@ -57,7 +57,7 @@ class Cell:
     def update_parent(self, parent_cell):
         self.parent = parent_cell
 
-    def grab_gold(self):
+    def get_gold(self):
         self.percept[0] = False
 
     def kill_wumpus(self, cell_matrix, kb):

@@ -13,17 +13,17 @@ def AddActionLogic(self, action):
         pass
     elif action == Action.TURN_DOWN:
         pass
-    elif action == Action.MOVE_FORWARD:
+    elif action == Action.GO_STRAIGHT:
         self.score -= 10
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
-    elif action == Action.GRAB_GOLD:
+    elif action == Action.GET_GOLD:
         self.score += 100
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
     elif action == Action.PERCEIVE_BREEZE:
         pass
-    elif action == Action.PERCEIVE_STENCH:
+    elif action == Action.SMELL_STENCH:
         pass
     elif action == Action.SHOOT:
         self.score -= 100
@@ -31,39 +31,39 @@ def AddActionLogic(self, action):
         self.AppendEventToOutputFile("Score: " + str(self.score))
     elif action == Action.KILL_WUMPUS:
         pass
-    elif action == Action.KILL_NO_WUMPUS:
+    elif action == Action.WUMPUS_NOT_KILLED:
         pass
-    elif action == Action.BE_EATEN_BY_WUMPUS:
+    elif action == Action.EATEN_BY_WUMPUS:
         self.score -= 10000
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
-    elif action == Action.FALL_INTO_PIT:
+    elif action == Action.FALL_IN_HOLE:
         self.score -= 10000
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
     elif action == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
         pass
-    elif action == Action.CLIMB_OUT_OF_THE_CAVE:
+    elif action == Action.ESCAPE_FROM_THE_CAVE:
         self.score += 10
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
-    elif action == Action.DECTECT_PIT:
+    elif action == Action.FIND_HOLE:
         pass
-    elif action == Action.DETECT_WUMPUS:
+    elif action == Action.FIND_WUMPUS:
         pass
-    elif action == Action.DETECT_NO_PIT:
+    elif action == Action.HOLE_NOT_FOUND:
         pass
-    elif action == Action.DETECT_NO_WUMPUS:
+    elif action == Action.WUMPUS_NOT_FOUND:
         pass
-    elif action == Action.INFER_PIT:
+    elif action == Action.INFER_HOLE:
         pass
-    elif action == Action.INFER_NOT_PIT:
+    elif action == Action.HOLE_NOT_INFERRED:
         pass
     elif action == Action.INFER_WUMPUS:
         pass
-    elif action == Action.INFER_NOT_WUMPUS:
+    elif action == Action.WUMPUS_NOT_INFERRED:
         pass
-    elif action == Action.DETECT_SAFE:
+    elif action == Action.SAFE_FOUND:
         pass
     elif action == Action.INFER_SAFE:
         pass

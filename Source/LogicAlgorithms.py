@@ -45,7 +45,7 @@ class AgentBrain:
             self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
 '''
         if self.AgentCell.parent == self.cave_cell:
-            self.AddAction(Action.CLIMB_OUT_OF_THE_CAVE)
+            self.AddAction(Action.ESCAPE_FROM_THE_CAVE)
 
         return self.action_list, self.init_agent_cell, self.init_cell_matrix
 
@@ -78,7 +78,7 @@ class AgentBrain:
 
     def MoveTo(self, next_cell):
         self.DirectionMove(next_cell)
-        self.AddAction(Action.MOVE_FORWARD)
+        self.AddAction(Action.GO_STRAIGHT)
         self.AgentCell = next_cell
 
 
@@ -124,7 +124,7 @@ class AgentBrain:
         for cell_row in self.cell_matrix:
             for cell in cell_row:
                 adj_cell_list = cell.get_adj_cell_list(self.cell_matrix)
-                if cell.exist_pit():
+                if cell.exist_hole():
                     for adj_cell in adj_cell_list:
                         if not adj_cell.exist_breeze():
                             return False, cell.matrix_pos

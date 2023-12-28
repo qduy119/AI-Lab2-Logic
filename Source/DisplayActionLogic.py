@@ -38,7 +38,7 @@ def DisplayActionLogic(self, action):
         self.wumpus.update(self.screen, self.noti, temp)
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
-    elif action == Action.MOVE_FORWARD:
+    elif action == Action.GO_STRAIGHT:
         self.agent.MoveForward(self.direct)
         i, j = self.agent.GetPosition()
         self.map.discover_cell_i_j(i, j)
@@ -49,12 +49,12 @@ def DisplayActionLogic(self, action):
         self.wumpus.update(self.screen, self.noti, temp)
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
-    elif action == Action.GRAB_GOLD:
+    elif action == Action.GET_GOLD:
         self.agent.GetPoint()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
-        self.gold.grab_gold(self.screen, self.font)
+        self.gold.get_gold(self.screen, self.font)
         temp = self.map.discovered()
         self.wumpus.update(self.screen, self.noti, temp)
         self.pit.update(self.screen, self.noti, temp)
@@ -62,7 +62,7 @@ def DisplayActionLogic(self, action):
         pygame.time.delay(500)
     elif action == Action.PERCEIVE_BREEZE:
         pass
-    elif action == Action.PERCEIVE_STENCH:
+    elif action == Action.SMELL_STENCH:
         pass
     elif action == Action.SHOOT:
         self.agent.Shoot()
@@ -98,16 +98,16 @@ def DisplayActionLogic(self, action):
         pygame.display.update()
         pygame.time.delay(500)
         pass
-    elif action == Action.KILL_NO_WUMPUS:
+    elif action == Action.WUMPUS_NOT_KILLED:
         pass
-    elif action == Action.BE_EATEN_BY_WUMPUS:
+    elif action == Action.EATEN_BY_WUMPUS:
         self.agent.HaveCollisionWithWumpushOrPit()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
         pygame.display.update()
         self.state = GAMEOVER
-    elif action == Action.FALL_INTO_PIT:
+    elif action == Action.FALL_IN_HOLE:
         self.agent.HaveCollisionWithWumpushOrPit()
         self.all_sprites.update()
         self.RunningDraw()
@@ -118,8 +118,8 @@ def DisplayActionLogic(self, action):
         self.message = "Kill all wumpus and grab all gold!"
         self.state = WIN
         pass
-    elif action == Action.CLIMB_OUT_OF_THE_CAVE:
-        self.message = "Climb out of the cave!"
+    elif action == Action.ESCAPE_FROM_THE_CAVE:
+        self.message = "Escape from the cave!"
         self.agent.Climb()
         self.all_sprites.update()
         self.RunningDraw()
@@ -127,7 +127,7 @@ def DisplayActionLogic(self, action):
         self.map.agent_climb(self.screen, self.font)
         pygame.display.update()
         pygame.time.delay(2000)
-    elif action == Action.DECTECT_PIT:
+    elif action == Action.FIND_HOLE:
         i, j = self.agent.GetPosition()
         if self.direct == 0:
             i -= 1
@@ -142,21 +142,21 @@ def DisplayActionLogic(self, action):
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
         pygame.time.delay(1000)
-    elif action == Action.DETECT_WUMPUS:
+    elif action == Action.FIND_WUMPUS:
         pass
-    elif action == Action.DETECT_NO_PIT:
+    elif action == Action.HOLE_NOT_FOUND:
         pass
-    elif action == Action.DETECT_NO_WUMPUS:
+    elif action == Action.WUMPUS_NOT_FOUND:
         pass
-    elif action == Action.INFER_PIT:
+    elif action == Action.INFER_HOLE:
         pass
-    elif action == Action.INFER_NOT_PIT:
+    elif action == Action.HOLE_NOT_INFERRED:
         pass
     elif action == Action.INFER_WUMPUS:
         pass
-    elif action == Action.INFER_NOT_WUMPUS:
+    elif action == Action.WUMPUS_NOT_INFERRED:
         pass
-    elif action == Action.DETECT_SAFE:
+    elif action == Action.SAFE_FOUND:
         pass
     elif action == Action.INFER_SAFE:
         pass

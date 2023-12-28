@@ -5,11 +5,11 @@ def AddPerceptToKnowledgeBase(self, cell):
 
 
     sign = "-"
-    if cell.exist_pit():
+    if cell.exist_hole():
         sign = "+"
         self.KB.InsertClause([cell.get_literal(Cell.Object.WUMPUS, "-")])
     self.KB.InsertClause([cell.get_literal(Cell.Object.PIT, sign)])
-    sign_pit = sign
+    sign_hole = sign
 
  
     sign = "-"
@@ -19,7 +19,7 @@ def AddPerceptToKnowledgeBase(self, cell):
     self.KB.InsertClause([cell.get_literal(Cell.Object.WUMPUS, sign)])
     sign_wumpus = sign
 
-    if sign_pit == sign_wumpus == "+":
+    if sign_hole == sign_wumpus == "+":
         raise TypeError(
             "Logic Error: Pit and Wumpus can not appear at the same cell."
         )

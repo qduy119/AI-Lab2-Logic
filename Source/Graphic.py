@@ -229,7 +229,7 @@ class Graphic:
                 y = []
                 for ir in range(len(cell_matrix)):
                     for ic in range(len(cell_matrix)):
-                        if cell_matrix[ir][ic].exist_pit():
+                        if cell_matrix[ir][ic].exist_hole():
                             x.append(ir)
                             y.append(ic)
                 self.pit = Pit(x, y)
@@ -255,7 +255,7 @@ class Graphic:
                         self.state = WIN
 
 
-                    if action == LogicAlgorithms.Action.FALL_INTO_PIT or action == LogicAlgorithms.Action.BE_EATEN_BY_WUMPUS:
+                    if action == LogicAlgorithms.Action.FALL_IN_HOLE or action == LogicAlgorithms.Action.EATEN_BY_WUMPUS:
                         self.state = GAMEOVER
                         break
 

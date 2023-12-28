@@ -1,7 +1,7 @@
 import pygame
 from Specification import *
 
-from PitObject import *
+from HoleObject import *
 from ArrowObject import *
 from WumpusObject import *
 from GoldObject import *
@@ -108,10 +108,10 @@ class Agent(pygame.sprite.Sprite):
     def Shoot(self):
         self.score -= 100
 
-    def wumpus_or_pit_collision(self):
+    def hit_hole_or_wumpus(self):
         self.score -= 10000
 
-    def grab_gold(self):
+    def get_gold(self):
         self.score += 100
 
     def Climb(self):

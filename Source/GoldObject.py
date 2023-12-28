@@ -7,7 +7,7 @@ class Gold:
         self.image = pygame.transform.scale(self.image, (150,300))
         self.pos = (835, 100)
 
-    def grab_gold(self, screen, font):
+    def get_gold(self, screen, font):
         text = font.render('You found a gold!!!', True, WHITE)
         textRect = text.get_rect()
         textRect.center = self.pos

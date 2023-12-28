@@ -4,7 +4,7 @@ from ActionEnum import Action
 def BacktrackingSearchAlgorithm(self):
 
     if self.AgentCell.exist_wumpus():
-        self.AddAction(Action.BE_EATEN_BY_WUMPUS)
+        self.AddAction(Action.EATEN_BY_WUMPUS)
         return False
 
     if not self.AgentCell.is_explored():
@@ -15,20 +15,20 @@ def BacktrackingSearchAlgorithm(self):
         return True
 
     if self.AgentCell.exist_gold():
-        self.AddAction(Action.GRAB_GOLD)
+        self.AddAction(Action.GET_GOLD)
         self.gold_list.remove(self.AgentCell)
-        self.AgentCell.grab_gold()
+        self.AgentCell.get_gold()
 
 
     if self.AgentCell.exist_breeze():
         self.AddAction(Action.PERCEIVE_BREEZE)
 
     if self.AgentCell.exist_stench():
-        self.AddAction(Action.PERCEIVE_STENCH)
+        self.AddAction(Action.SMELL_STENCH)
 
 
-    if self.AgentCell.exist_pit():
-        self.AddAction(Action.FALL_INTO_PIT)
+    if self.AgentCell.exist_hole():
+        self.AddAction(Action.FALL_IN_HOLE)
         return False
 
     ValidAdjCellList = self.AgentCell.get_adj_cell_list(self.cell_matrix)
@@ -42,7 +42,7 @@ def BacktrackingSearchAlgorithm(self):
     if not self.AgentCell.is_OK():
         TempAdjCellList = []
         for ValidAdjCell in ValidAdjCellList:
-            if ValidAdjCell.is_explored() and ValidAdjCell.exist_pit():
+            if ValidAdjCell.is_explored() and ValidAdjCell.exist_hole():
                 TempAdjCellList.append(ValidAdjCell)
         for AdjCell in TempAdjCellList:
             ValidAdjCellList.remove(AdjCell)
@@ -64,21 +64,21 @@ def BacktrackingSearchAlgorithm(self):
                 have_wumpus = self.KB.Inference(not_alpha)
 
                 if have_wumpus:
-                    self.AddAction(Action.DETECT_WUMPUS)
+                    self.AddAction(Action.FIND_WUMPUS)
                     self.AddAction(Action.SHOOT)
                     self.AddAction(Action.KILL_WUMPUS)
                     self.wumpus_list.remove(ValidAdjCell)
                     ValidAdjCell.kill_wumpus(self.cell_matrix, self.KB)
                     self.AppendEventToOutputFile("KB: " + str(self.KB.KB))
                 else:
-                    self.AddAction(Action.INFER_NOT_WUMPUS)
+                    self.AddAction(Action.WUMPUS_NOT_INFERRED)
                     not_alpha = [
                         [ValidAdjCell.get_literal(Cell.Object.WUMPUS, "+")]
                     ]
                     have_no_wumpus = self.KB.Inference(not_alpha)
 
                     if have_no_wumpus:
-                        self.AddAction(Action.DETECT_NO_WUMPUS)
+                        self.AddAction(Action.WUMPUS_NOT_FOUND)
                     else:
                         if ValidAdjCell not in TempAdjCellList:
                             TempAdjCellList.append(ValidAdjCell)
@@ -122,24 +122,24 @@ def BacktrackingSearchAlgorithm(self):
                 )
                 self.DirectionMove(ValidAdjCell)
 
-                self.AddAction(Action.INFER_PIT)
+                self.AddAction(Action.INFER_HOLE)
                 not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "-")]]
                 have_pit = self.KB.Inference(not_alpha)
 
                 if have_pit:
-                    self.AddAction(Action.DECTECT_PIT)
+                    self.AddAction(Action.FIND_HOLE)
                     ValidAdjCell.explore()
                     self.AddNewPerceptIntoKB(ValidAdjCell)
                     ValidAdjCell.update_parent(ValidAdjCell)
                     TempAdjCellList.append(ValidAdjCell)
 
                 else:
-                    self.AddAction(Action.INFER_NOT_PIT)
+                    self.AddAction(Action.HOLE_NOT_INFERRED)
                     not_alpha = [[ValidAdjCell.get_literal(Cell.Object.PIT, "+")]]
                     have_no_pit = self.KB.Inference(not_alpha)
 
                     if have_no_pit:
-                        self.AddAction(Action.DETECT_NO_PIT)
+                        self.AddAction(Action.HOLE_NOT_FOUND)
 
                     else:
                         TempAdjCellList.append(ValidAdjCell)
