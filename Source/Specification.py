@@ -13,20 +13,23 @@ IMG_INITIAL_CELL = '../Assets/Images/initial_cell.png'
 IMG_DISCOVERED_CELL = '../Assets/Images/discovered_cell.png'
 
 # Object
+IMG_WUMPUS_LOGO = '../Assets/Images/wumpus_logo.png'
 IMG_PIT = '../Assets/Images/pit.png'
 IMG_WUMPUS = '../Assets/Images/wumpus.png'
 IMG_GOLD = '../Assets/Images/gold.png'
+IMG_WINNER='../Assets/Images/win.png'
+IMG_BG= '../Assets/Images/bg.jpg'
 
 # Hunter
-IMG_HUNTER_RIGHT = '../Assets/Images/hunter_right.png'
-IMG_HUNTER_LEFT = '../Assets/Images/hunter_left.png'
-IMG_HUNTER_UP = '../Assets/Images/hunter_up.png'
-IMG_HUNTER_DOWN = '../Assets/Images/hunter_down.png'
+IMG_AGENT_RIGHT = '../Assets/Images/agent_right.png'
+IMG_AGENT_LEFT = '../Assets/Images/agent_left.png'
+IMG_AGENT_UP = '../Assets/Images/agent_up.png'
+IMG_AGENT_DOWN = '../Assets/Images/agent_down.png'
 
-IMG_ARROW_RIGHT = '../Assets/Images/arrow_right.png'
-IMG_ARROW_LEFT = '../Assets/Images/arrow_left.png'
-IMG_ARROW_UP = '../Assets/Images/arrow_up.png'
-IMG_ARROW_DOWN = '../Assets/Images/arrow_down.png'
+IMG_WEAPON_RIGHT = '../Assets/Images/weapon_right.png'
+IMG_WEAPON_LEFT = '../Assets/Images/weapon_left.png'
+IMG_WEAPON_UP = '../Assets/Images/weapon_up.png'
+IMG_WEAPON_DOWN = '../Assets/Images/weapon_down.png'
 
 # Map
 MAP_LIST = ['../Assets/Input/map_1.txt',
@@ -54,15 +57,29 @@ DARK_GREY = (190, 190, 190)
 RED = (0, 0, 0)
 
 # state
+HOME = 'home'
+ABOUT = 'about'
 RUNNING = 'running'
 GAMEOVER = 'gameover'
 WIN = 'win'
 TRYBEST = 'trybest'
 MAP = 'map'
 
+PLAY_POS = pygame.Rect(235, 380, 500, 50)
+ABOUT_POS = pygame.Rect(235, 460, 500, 50)
+EXIT_POS = pygame.Rect(235, 540, 500, 50)
+
 LEVEL_1_POS = pygame.Rect(235, 120, 500, 50)
 LEVEL_2_POS = pygame.Rect(235, 200, 500, 50)
 LEVEL_3_POS = pygame.Rect(235, 280, 500, 50)
 LEVEL_4_POS = pygame.Rect(235, 360, 500, 50)
 LEVEL_5_POS = pygame.Rect(235, 440, 500, 50)
-EXIT_POS = pygame.Rect(235, 520, 500, 50)
+BACK_POS = pygame.Rect(760, 550, 100, 50)
+
+TITLE_POS = pygame.Rect(235, 120, 500, 50)
+MEMBER_1_POS = pygame.Rect(235, 220, 500, 30)
+MEMBER_2_POS = pygame.Rect(235, 280, 500, 30)
+MEMBER_3_POS = pygame.Rect(235, 340, 500, 30)
+MEMBER_4_POS = pygame.Rect(235, 400, 500, 30)
+MEMBER_5_POS = pygame.Rect(235, 460, 500, 30)
+MEMBER_BACK_POS = pygame.Rect(235, 540, 500, 50)

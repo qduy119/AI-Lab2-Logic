@@ -10,7 +10,7 @@ class Agent(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.score = 0
-        self.image = pygame.image.load(IMG_HUNTER_RIGHT).convert()
+        self.image = pygame.image.load(IMG_AGENT_RIGHT).convert()
         self.img_list = []
         self.y = 40 + (x-1) * 70
         self.x = 40 + (y-1) * 70
@@ -22,7 +22,7 @@ class Agent(pygame.sprite.Sprite):
 
     def load_image(self):
         self.img_list.append(self.image)
-        temp = [IMG_HUNTER_LEFT, IMG_HUNTER_UP, IMG_HUNTER_DOWN]
+        temp = [IMG_AGENT_LEFT, IMG_AGENT_UP, IMG_AGENT_DOWN]
         for i in range (0, 3):
             img = pygame.image.load(temp[i]).convert()
             self.img_list.append(img)
@@ -30,10 +30,10 @@ class Agent(pygame.sprite.Sprite):
     def appear(self, screen):
         screen.blit(self.image, (self.x - 30, self.y - 30))
 
-    def get_score(self):
+    def GetPoint(self):
         return self.score
 
-    def move_forward(self, direct):
+    def MoveForward(self, direct):
         if direct == 0:
             self.move_up()
         elif direct == 1:
@@ -67,19 +67,19 @@ class Agent(pygame.sprite.Sprite):
         if self.j < 9:
             self.j += 1
 
-    def turn_up(self):
+    def TurnUp(self):
         self.image = self.img_list[3]
         return 0
 
-    def turn_down(self):
+    def TurnDown(self):
         self.image = self.img_list[2]
         return 1
 
-    def turn_left(self):
+    def TurnLeft(self):
         self.image = self.img_list[1]
         return 2
 
-    def turn_right(self):
+    def TurnRight(self):
         self.image = self.img_list[0]
         return 3
 
@@ -102,10 +102,10 @@ class Agent(pygame.sprite.Sprite):
 
         self.rect.center = (self.x, self.y)
 
-    def get_pos(self):
+    def GetPosition(self):
         return self.i, self.j
 
-    def shoot(self):
+    def Shoot(self):
         self.score -= 100
 
     def wumpus_or_pit_collision(self):
@@ -114,6 +114,6 @@ class Agent(pygame.sprite.Sprite):
     def grab_gold(self):
         self.score += 100
 
-    def climb(self):
+    def Climb(self):
         self.score += 10
 

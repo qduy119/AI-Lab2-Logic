@@ -4,7 +4,7 @@ from Specification import *
 class Arrow:
     def __init__(self):
         self.img_list = []
-        temp = [IMG_ARROW_RIGHT, IMG_ARROW_LEFT, IMG_ARROW_UP, IMG_ARROW_DOWN]
+        temp = [IMG_WEAPON_RIGHT, IMG_WEAPON_LEFT, IMG_WEAPON_UP, IMG_WEAPON_DOWN]
         for i in range(0, 4):
             img = pygame.image.load(temp[i]).convert()
             self.img_list.append(img)

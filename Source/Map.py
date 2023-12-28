@@ -39,12 +39,12 @@ class Map:
         return self.is_discover
 
     def agent_climb(self, screen, font):
-        text = font.render('Climbed out!!!', True, BLACK)
+        text = font.render('Climbed out!!!', True, WHITE)
         textRect = text.get_rect()
         textRect.center = (830, 100)
         screen.blit(text, textRect)
-        text = font.render('Score + 10', True, BLACK)
-        textRect.center = (830, 150)
+        text = font.render('Score + 10', True, WHITE)
+        textRect.center = (850, 150)
         screen.blit(text, textRect)
 
     def pit_detect(self, i, j):

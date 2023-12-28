@@ -3,7 +3,7 @@ from ActionEnum import Action
 from Specification import *
 def DisplayActionLogic(self, action):
     if action == Action.TURN_LEFT:
-        self.direct = self.agent.turn_left()
+        self.direct = self.agent.TurnLeft()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -12,7 +12,7 @@ def DisplayActionLogic(self, action):
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
     elif action == Action.TURN_RIGHT:
-        self.direct = self.agent.turn_right()
+        self.direct = self.agent.TurnRight()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -21,7 +21,7 @@ def DisplayActionLogic(self, action):
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
     elif action == Action.TURN_UP:
-        self.direct = self.agent.turn_up()
+        self.direct = self.agent.TurnUp()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -30,7 +30,7 @@ def DisplayActionLogic(self, action):
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
     elif action == Action.TURN_DOWN:
-        self.direct = self.agent.turn_down()
+        self.direct = self.agent.TurnDown()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -39,8 +39,8 @@ def DisplayActionLogic(self, action):
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
     elif action == Action.MOVE_FORWARD:
-        self.agent.move_forward(self.direct)
-        i, j = self.agent.get_pos()
+        self.agent.MoveForward(self.direct)
+        i, j = self.agent.GetPosition()
         self.map.discover_cell_i_j(i, j)
         self.all_sprites.update()
         self.RunningDraw()
@@ -50,7 +50,7 @@ def DisplayActionLogic(self, action):
         self.pit.update(self.screen, self.noti, temp)
         pygame.display.update()
     elif action == Action.GRAB_GOLD:
-        self.agent.grab_gold()
+        self.agent.GetPoint()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -65,11 +65,11 @@ def DisplayActionLogic(self, action):
     elif action == Action.PERCEIVE_STENCH:
         pass
     elif action == Action.SHOOT:
-        self.agent.shoot()
+        self.agent.Shoot()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
-        i, j = self.agent.get_pos()
+        i, j = self.agent.GetPosition()
         self.arrow.Shoot(self.direct, self.screen, i, j)
         temp = self.map.discovered()
         self.wumpus.update(self.screen, self.noti, temp)
@@ -78,7 +78,7 @@ def DisplayActionLogic(self, action):
         pygame.time.delay(500)
     elif action == Action.KILL_WUMPUS:
 
-        i, j = self.agent.get_pos()
+        i, j = self.agent.GetPosition()
         if self.direct == 0:
             i -= 1
         elif self.direct == 1:
@@ -89,7 +89,7 @@ def DisplayActionLogic(self, action):
             j += 1
         self.wumpus.wumpus_killed(i, j)
         self.wumpus.wumpus_notification()
-        i, j = self.agent.get_pos()
+        i, j = self.agent.GetPosition()
         if not self.wumpus.stench_i_j(i, j):
             self.wumpus.wumpus_kill(self.screen, self.font)
         temp = self.map.discovered()
@@ -101,14 +101,14 @@ def DisplayActionLogic(self, action):
     elif action == Action.KILL_NO_WUMPUS:
         pass
     elif action == Action.BE_EATEN_BY_WUMPUS:
-        self.agent.wumpus_or_pit_collision()
+        self.agent.HaveCollisionWithWumpushOrPit()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
         pygame.display.update()
         self.state = GAMEOVER
     elif action == Action.FALL_INTO_PIT:
-        self.agent.wumpus_or_pit_collision()
+        self.agent.HaveCollisionWithWumpushOrPit()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -120,7 +120,7 @@ def DisplayActionLogic(self, action):
         pass
     elif action == Action.CLIMB_OUT_OF_THE_CAVE:
         self.message = "Climb out of the cave!"
-        self.agent.climb()
+        self.agent.Climb()
         self.all_sprites.update()
         self.RunningDraw()
         self.all_sprites.draw(self.screen)
@@ -128,7 +128,7 @@ def DisplayActionLogic(self, action):
         pygame.display.update()
         pygame.time.delay(2000)
     elif action == Action.DECTECT_PIT:
-        i, j = self.agent.get_pos()
+        i, j = self.agent.GetPosition()
         if self.direct == 0:
             i -= 1
         elif self.direct == 1:
