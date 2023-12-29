@@ -251,7 +251,7 @@ class Graphic:
                     pygame.time.delay(SPEED)
                     self.DisplayAction(action)
 
-                    if action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+                    if action == LogicAlgorithms.Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD:
                         self.state = WIN
 
 

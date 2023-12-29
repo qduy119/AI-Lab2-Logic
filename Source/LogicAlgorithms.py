@@ -42,7 +42,7 @@ class AgentBrain:
                     WinFlag = False
                     break
         if WinFlag:
-            self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
+            self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD)
 '''
         if self.AgentCell.parent == self.cave_cell:
             self.AddAction(Action.ESCAPE_FROM_THE_CAVE)

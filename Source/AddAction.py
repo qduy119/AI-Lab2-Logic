@@ -41,7 +41,7 @@ def AddActionLogic(self, action):
         self.score -= 10000
         print("Score: " + str(self.score))
         self.AppendEventToOutputFile("Score: " + str(self.score))
-    elif action == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+    elif action == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD:
         pass
     elif action == Action.ESCAPE_FROM_THE_CAVE:
         self.score += 10

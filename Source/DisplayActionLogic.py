@@ -114,7 +114,7 @@ def DisplayActionLogic(self, action):
         self.all_sprites.draw(self.screen)
         pygame.display.update()
         self.state = GAMEOVER
-    elif action == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+    elif action == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD:
         self.message = "Kill all wumpus and grab all gold!"
         self.state = WIN
         pass

@@ -11,7 +11,7 @@ def BacktrackingSearchAlgorithm(self):
         self.AgentCell.explore()
         self.AddNewPerceptIntoKB(self.AgentCell)
     if self.gold_list.__len__() == 0 and self.wumpus_list.__len__() == 0:
-        self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD)
+        self.AddAction(Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD)
         return True
 
     if self.AgentCell.exist_gold():
@@ -158,7 +158,7 @@ def BacktrackingSearchAlgorithm(self):
 
         if not BacktrackingSearchAlgorithm(self):
             return False
-        if self.action_list[-1] == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_FOOD:
+        if self.action_list[-1] == Action.KILL_ALL_WUMPUS_AND_GRAB_ALL_GOLD:
             return True
         self.MoveTo(pre_agent_cell)
         print("Backtrack: ", end="")
